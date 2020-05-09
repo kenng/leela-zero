@@ -1,0 +1,11 @@
+# Update the Dockerfile to look like this
+FROM leela-zero:base
+RUN apt update && apt install -y  curl
+# CPU build
+RUN CXX=g++ CC=gcc cmake -DUSE_CPU_ONLY=1 ..
+RUN cmake --build . --target leelaz --config Release -- -j2
+RUN make leelaz
+RUN make tests && ./tests
+RUN curl -O http://zero.sjeng.org/best-network
+# Do something to keep the container running
+CMD sleep 8640
